@@ -1,12 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { CreateTodo } from "./CreateTodo";
+import { TodoList } from "./TodoList";
 
 const TodosContainer = () => {
+  const [todoData, setTodoData] = useState([]);
+
   const getDataFromDb = async () => {
     // Fetch data from external API
     const res = await fetch(
       `https://sloppy-room-production.up.railway.app/todo`
     );
     const data = await res.json();
+    setTodoData(data);
 
     return data;
   };
@@ -16,7 +21,12 @@ const TodosContainer = () => {
     console.log("datafrom DB: ", dataFromDb);
   }, []);
 
-  return <div>This is an awesome todo list!</div>;
+  return (
+    <div>
+      <CreateTodo />
+      <TodoList todoData={todoData} />
+    </div>
+  );
 };
 
 export default TodosContainer;
