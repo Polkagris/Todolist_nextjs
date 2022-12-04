@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { CreateTodo } from "./CreateTodo";
-import { TodoList } from "./TodoList";
+import { TodoList, TodoType } from "./TodoList";
 
 const TodosContainer = () => {
   const [todoData, setTodoData] = useState([]);
-  const [requestMade, setRequestMade] = useState([]);
+  const [requestMade, setRequestMade] = useState<TodoType[]>([]);
 
   const getDataFromDb = async () => {
-    // Fetch data from external API
     const res = await fetch(
       `https://sloppy-room-production.up.railway.app/todo`
     );
     const data = await res.json();
     const reversedData = data?.reverse();
-    setTodoData(reversedData);
+    const onlyUnCompletedTodos = reversedData?.filter(
+      (todo: TodoType) => todo.completed != true
+    );
+    setTodoData(onlyUnCompletedTodos);
 
     return data;
   };
@@ -26,7 +28,7 @@ const TodosContainer = () => {
   return (
     <div>
       <CreateTodo setRequestMade={setRequestMade} />
-      <TodoList todoData={todoData} />
+      <TodoList todoData={todoData} setRequestMade={setRequestMade} />
     </div>
   );
 };

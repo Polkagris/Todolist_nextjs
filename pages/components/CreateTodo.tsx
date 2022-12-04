@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { TodoType } from "./TodoList";
 
-export const CreateTodo = ({ setRequestMade }) => {
+interface CreateTodoPropTypes {
+  setRequestMade: (arg0: TodoType[]) => void;
+}
+
+export const CreateTodo = ({ setRequestMade }: CreateTodoPropTypes) => {
   const [todoInput, setTodoInput] = useState("");
   const [postResponse, setPostResponse] = useState("");
 
@@ -9,16 +14,18 @@ export const CreateTodo = ({ setRequestMade }) => {
     setTodoInput(e.target.value);
   };
 
-  const handleCreateNewTodoClick = () => {
+  const handleCreateNewTodoClick = async () => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: todoInput, completed: false }),
     };
-    fetch("https://sloppy-room-production.up.railway.app/todo", requestOptions)
-      .then((response) => response.json())
-      .then((data) => setPostResponse(data))
-      .then((data) => setRequestMade(data));
+    const response = await fetch(
+      "https://sloppy-room-production.up.railway.app/todo",
+      requestOptions
+    );
+    const jsonResponse = await response?.json();
+    setRequestMade(jsonResponse);
 
     setTodoInput("");
   };

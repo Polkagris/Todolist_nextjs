@@ -9,13 +9,19 @@ export interface TodoType {
 
 export interface TodoDataType {
   todoData: TodoType[];
+  setRequestMade: (arg0: TodoType[]) => void;
 }
 
-export const TodoList = ({ todoData }: TodoDataType) => {
+export const TodoList = ({ todoData, setRequestMade }: TodoDataType) => {
   return (
     <div className="flex flex-col items-center">
       {todoData?.map((todo) => (
-        <Todo id={todo.id} title={todo.title} completed={todo.completed} />
+        <Todo
+          id={todo.id}
+          title={todo.title}
+          completed={todo.completed}
+          setRequestMade={setRequestMade}
+        />
       ))}
     </div>
   );
